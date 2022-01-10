@@ -4,10 +4,11 @@ public class BankApp {
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
         System.out.println("Welcome to the banking app.");
-        System.out.println("Are you a returning user? y/n");
-        String returning = input.next();
+        System.out.println("Please select an option: ");
+        System.out.println("Login - 1 \n Create new user account - 2 \n");
+        int option = input.nextInt();
 
-        if (returning.equals("y")) {
+        if (option == 1) {
             System.out.println("Please enter your Username: ");
             String username = input.nextLine();
             System.out.println("Please enter your password: ");
