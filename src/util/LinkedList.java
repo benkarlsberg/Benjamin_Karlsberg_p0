@@ -1,7 +1,11 @@
+package util;
+
+import util.Node;
+
 public class LinkedList<T> {
     private Node<T> head;
     private int numItems;
-    // private Node<T> prev;
+    // private util.Node<T> prev;
 
     // constructor
     public LinkedList() {

@@ -1,3 +1,5 @@
+package util;
+
 public class Node<T>{
     private Node<T> next;
     private T object;

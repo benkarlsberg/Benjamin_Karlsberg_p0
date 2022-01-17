@@ -1,3 +1,5 @@
+package repositories;
+
 import java.util.Scanner;
 
 public class BankApp {

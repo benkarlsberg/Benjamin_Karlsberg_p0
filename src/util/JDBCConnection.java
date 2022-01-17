@@ -1,3 +1,5 @@
+package util;
+
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -24,7 +26,7 @@ public class JDBCConnection {
             Properties props = new Properties();
             try {
 
-                props.load(JDBCConnection.class.getClassLoader().getResourceAsStream("connection.properties"));
+                props.load(JDBCConnection.class.getClassLoader().getResourceAsStream("util/connection.properties"));
 
                 String endpoint = props.getProperty("endpoint");
                 //URL Format (Postgresql JDBC)
