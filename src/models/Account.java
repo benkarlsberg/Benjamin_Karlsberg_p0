@@ -7,8 +7,9 @@ public class Account extends User {
     private double balance = 0;
     private String accountType;
 
-    public Account(String firstName, String lastName, String userName, String password) {
+    public Account(String firstName, String lastName, String userName, String password, String accountType) {
         super(firstName, lastName, userName, password);
+        this.accountType = accountType;
     }
 
     public double getBalance() {
@@ -32,7 +33,7 @@ public class Account extends User {
             if (amount >= 0.0) {
                 setBalance(getBalance() - amount);
                 System.out.println("You have successfully withdrawn $" + amount + ". " +
-                        "Your account balance is now: $" + this.balance + "");
+                        "Your account balance is now: $" + getBalance() + "");
             } else {
                 throw new NegativeException();
             }
@@ -46,7 +47,7 @@ public class Account extends User {
         if (amount >= 0.0) {
             setBalance(getBalance() + amount);
             System.out.println("You have made a successful deposit of $" + amount + ". " +
-                    "Your account balance is now: $" + this.balance + "");
+                    "Your account balance is now: $" + getBalance() + "");
         }
         else {
             throw new NegativeException();

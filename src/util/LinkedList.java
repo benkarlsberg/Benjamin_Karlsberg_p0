@@ -77,4 +77,23 @@ public class LinkedList<T> {
             System.out.println("List index out of bounds on delete");
         }
     }
+
+    public String toString() {
+
+        String result = "(";
+
+        Node<T> curr = head;
+
+        while(curr != null) {
+            result += curr.getObject();
+
+            if(curr.getNext() != null) {
+                result += ", ";
+            }
+
+            curr = curr.getNext();
+        }
+        result += ")";
+        return result;
+    }
 }
