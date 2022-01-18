@@ -1,7 +1,7 @@
 package models;
 
 public class User {
-    private int id;
+    private int userId;
     private String firstName;
     private String lastName;
     private String userName;
@@ -12,8 +12,8 @@ public class User {
     }
 
     // Full-Arg Constructor
-    public User(int id, String firstName, String lastName, String userName, String password) {
-        this.id = id;
+    public User(int userId, String firstName, String lastName, String userName, String password) {
+        this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.userName = userName;
@@ -28,9 +28,9 @@ public class User {
         this.password = password;
     }
 
-    public int getId() { return id;}
+    public int getUserId() { return userId;}
 
-    public void setId(int id) {this.id = id;}
+    public void setUserId(int userId) {this.userId = userId;}
 
     public String getFirstName() {
         return firstName;
@@ -72,7 +72,7 @@ public class User {
     @Override
     public String toString() {
         return "User{" +
-                "id: " + id +
+                "User id: " + userId +
                 ", First Name: '" + firstName + '\'' +
                 ", Last Name: '" + lastName + '\'' +
                 ", Username: '" + userName + '\'' +

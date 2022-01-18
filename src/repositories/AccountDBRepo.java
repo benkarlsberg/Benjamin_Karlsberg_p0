@@ -1,7 +1,7 @@
 package repositories;
 
 import exceptions.ResourceNotFoundException;
-import models.User;
+import models.Account;
 import util.JDBCConnection;
 import util.LinkedList;
 
@@ -10,27 +10,25 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class UserDBRepo implements UserRepo {
+public class AccountDBRepo implements AccountRepo{
 
     Connection conn = JDBCConnection.getConnection();
 
     @Override
-    public User addUser(User u) {
-
-        String sql = "INSERT INTO users VALUES (default, ?, ?, ?, ?) RETURNING *";
+    public Account addAccount(Account a) {
+        String sql = "INSERT INTO accounts VALUES (default, ?, ?, ?) RETURNING *";
 
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
 
-            ps.setString(1, u.getFirstName());
-            ps.setString(2, u.getLastName());
-            ps.setString(3, u.getUserName());
-            ps.setString(4, u.getPassword());
+            ps.setInt(1, a.getUserId());
+            ps.setString(2, a.getAccountType());
+            ps.setDouble(3, a.getBalance());
 
             ResultSet rs = ps.executeQuery();
 
             if(rs.next()) {
-                return buildUser(rs);
+               return buildAccount(rs);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -39,9 +37,9 @@ public class UserDBRepo implements UserRepo {
     }
 
     @Override
-    public User getUser(int id) {
+    public Account getAccount(int id) {
 
-        String sql = "SELECT * FROM users WHERE u_id = ?";
+        String sql = "SELECT * FROM accounts WHERE acc_id = ?";
 
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
@@ -50,7 +48,7 @@ public class UserDBRepo implements UserRepo {
             ResultSet rs = ps.executeQuery();
 
             if(rs.next()) {
-                return buildUser(rs);
+                return buildAccount(rs);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -59,20 +57,20 @@ public class UserDBRepo implements UserRepo {
     }
 
     @Override
-    public LinkedList<User> getAllUsers() {
+    public LinkedList<Account> getAllAccounts() {
 
-        String sql = "SELECT * FROM users";
+        String sql = "SELECT * FROM accounts";
 
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
 
             ResultSet rs = ps.executeQuery();
 
-            LinkedList<User> users = new LinkedList<User>();
+            LinkedList<Account> accounts = new LinkedList<Account>();
             while(rs.next()) {
-                users.insert(buildUser(rs));
+                accounts.insert(buildAccount(rs));
             }
-            return users;
+            return accounts;
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -81,23 +79,21 @@ public class UserDBRepo implements UserRepo {
     }
 
     @Override
-    public User updateUser(User change) {
+    public Account updateAccount(Account change) {
 
-        String sql = "UPDATE users set first_name=?, last_name=?, username=?, pw=? WHERE u_id = ? RETURNING *";
+        String sql = "UPDATE accounts set account_type=?, balance=? WHERE acc_id = ? RETURNING *";
 
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
 
-            ps.setString(1, change.getFirstName());
-            ps.setString(2, change.getLastName());
-            ps.setString(3, change.getUserName());
-            ps.setString(4, change.getPassword());
-            ps.setInt(5, change.getUserId());
+            ps.setString(1, change.getAccountType());
+            ps.setDouble(2, change.getBalance());
+            ps.setInt(3, change.getUserId());
 
             ResultSet rs = ps.executeQuery();
 
             if(rs.next()) {
-                return buildUser(rs);
+                return buildAccount(rs);
             }
 
         } catch (SQLException e) {
@@ -107,9 +103,9 @@ public class UserDBRepo implements UserRepo {
     }
 
     @Override
-    public User deleteUser(int id) throws ResourceNotFoundException {
+    public Account deleteAccount(int id) throws ResourceNotFoundException {
 
-        String sql = "DELETE FROM users WHERE u_id = ? RETURNING *";
+        String sql = "DELETE FROM accounts WHERE acc_id = ? RETURNING *";
 
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
@@ -118,7 +114,7 @@ public class UserDBRepo implements UserRepo {
             ResultSet rs = ps.executeQuery();
 
             if(rs.next()) {
-                return buildUser(rs);
+                return buildAccount(rs);
             } else {
                 throw new ResourceNotFoundException("Resource with id: " + id + " was not found in database.");
             }
@@ -129,13 +125,12 @@ public class UserDBRepo implements UserRepo {
     }
 
     //Helper Method
-    private User buildUser(ResultSet rs) throws SQLException {
-        User u = new User();
-        u.setUserId(rs.getInt("u_id"));
-        u.setFirstName(rs.getString("first_name"));
-        u.setLastName(rs.getString("last_name"));
-        u.setUserName(rs.getString("username"));
-        u.setPassword(rs.getString("pw"));
-        return u;
+    private Account buildAccount(ResultSet rs) throws SQLException {
+        Account a = new Account();
+        a.setAccId(rs.getInt("acc_id"));
+        a.setUserId(rs.getInt("u_id"));
+        a.setAccountType(rs.getString("account_type"));
+        a.setBalance(rs.getDouble("balance"));
+        return a;
     }
 }

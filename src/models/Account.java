@@ -3,13 +3,43 @@ package models;
 import exceptions.NegativeException;
 import exceptions.WithdrawException;
 
-public class Account extends User {
+public class Account {
+    private int accountId;
+    private int userId;
     private double balance = 0;
     private String accountType;
 
-    public Account(String firstName, String lastName, String userName, String password, String accountType) {
-        super(firstName, lastName, userName, password);
+    //No-arg constructor
+    public Account() {
+    }
+
+    // Full-arg constructor
+    public Account(int accountId, int userId, String accountType) {
+        this.accountId = accountId;
+        this.userId = userId;
         this.accountType = accountType;
+    }
+
+    //Id-less constructor
+    public Account(int userId, String accountType) {
+        this.userId = userId;
+        this.accountType = accountType;
+    }
+
+    public int getAccId() {
+        return accountId;
+    }
+
+    public void setAccId(int acc_id) {
+        this.accountId = acc_id;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public double getBalance() {
@@ -52,5 +82,15 @@ public class Account extends User {
         else {
             throw new NegativeException();
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Account{" +
+                " Account Id: " + accountId +
+                " User Id: " + userId +
+                ", Account Type: '" + accountType + '\'' +
+                " Balance: " + balance + '\'' +
+                '}';
     }
 }
