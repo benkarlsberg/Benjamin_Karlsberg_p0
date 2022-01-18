@@ -1,4 +1,4 @@
---drop table if exists users;
+--drop table if exists users cascade;
 --drop table if exists accounts;
 
 --create users table
@@ -7,7 +7,8 @@ u_id serial primary key,
 first_name varchar(50) not null,
 last_name varchar(50) not null,
 username varchar(50) not null,
-pw varchar(50) not null);
+pw varchar(50) not null,
+unique (username));
 
 -- create accounts table
 create table if not exists accounts (

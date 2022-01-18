@@ -28,11 +28,14 @@ public class BankApp {
     }
 
     public void run() {
+
+        System.out.println("Welcome to the banking app.");
+        System.out.println("Please select an option: ");
+        System.out.println("Login - 1\nRegister new user - 2\nExit - 3\n");
+
         int option = input.nextInt();
+
         while(option != 0) {
-            System.out.println("Welcome to the banking app.");
-            System.out.println("Please select an option: ");
-            System.out.println("Login - 1 \n Create new user account - 2 \n Exit - 3 \n");
 
             if (option == 1) {
                 user = login();
@@ -42,17 +45,23 @@ public class BankApp {
                 setLoggedIn(true);
                 option = 0;
             } else if (option == 3) {
+                System.out.println("Thank you for using the app. Goodbye!");
                 return;
             } else {
                 System.out.println("Please enter a valid option.");
+                System.out.println("Login - 1\nRegister new user - 2\nExit - 3\n");
+
             }
         }
 
+        System.out.println("");
+        System.out.println("You are now logged in as " + user.getUserName() + "\n");
+        System.out.println("Please select an option: ");
+        System.out.println("Check account information - 1\nOpen an account - 2\nExit - 3\n");
+
         option = input.nextInt();
+
         while(option != 0) {
-            System.out.println("You are now logged in.");
-            System.out.println("Please select an option: ");
-            System.out.println("Check account information - 1 \n Create new account -2 \n Exit - 3");
 
             if(option == 1) {
                 System.out.println("Here are your current accounts: ");
@@ -61,6 +70,13 @@ public class BankApp {
             }
             else if(option == 2) {
                account = createAccount();
+               option = 0;
+            }
+            else if(option ==3) {
+                return;
+            }
+            else {
+                System.out.println("Please enter a valid option.");
             }
 
         }
@@ -75,8 +91,7 @@ public class BankApp {
         String password = input.nextLine();
 
         // login logic
-        LinkedList<User> allUsers = ur.getAllUsers();
-        User user = allUsers.findByUsername(username);
+        User user = ur.getUser(username);
 
         while (!isLoggedIn()) {
             if (password.equals(user.getPassword()))

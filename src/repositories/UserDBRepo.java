@@ -4,7 +4,9 @@ import exceptions.ResourceNotFoundException;
 import models.User;
 import util.JDBCConnection;
 import util.LinkedList;
+import util.Node;
 
+import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -46,6 +48,25 @@ public class UserDBRepo implements UserRepo {
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, id);
+
+            ResultSet rs = ps.executeQuery();
+
+            if(rs.next()) {
+                return buildUser(rs);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public User getUser(String username) {
+        String sql = "SELECT * FROM users WHERE username = ?";
+
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, username);
 
             ResultSet rs = ps.executeQuery();
 
