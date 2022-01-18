@@ -2,10 +2,11 @@ package util;
 
 import util.Node;
 
+import java.lang.reflect.InvocationTargetException;
+
 public class LinkedList<T> {
     private Node<T> head;
     private int numItems;
-    // private util.Node<T> prev;
 
     // constructor
     public LinkedList() {
@@ -28,6 +29,26 @@ public class LinkedList<T> {
             curr = curr.getNext();
         }
         return curr;
+    }
+
+    public T findByUsername(String username) {
+
+        Node<T> iterator = head;
+
+        for(int i = 0; i < numItems; i++) {
+            T element = iterator.getObject();
+            try {
+                if (element.getClass().getMethod("getUserName").invoke(element) == username) {
+                    return element;
+                }
+            } catch (NoSuchMethodException e) {
+                continue;
+            } catch (InvocationTargetException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
+            iterator = iterator.getNext();
+        }
+        return null;
     }
 
     // inserts node at front if no index
@@ -90,7 +111,6 @@ public class LinkedList<T> {
             if(curr.getNext() != null) {
                 result += ", ";
             }
-
             curr = curr.getNext();
         }
         result += ")";
