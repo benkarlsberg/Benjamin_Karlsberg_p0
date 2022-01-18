@@ -1,5 +1,6 @@
 package repositories;
 
+import exceptions.NegativeException;
 import models.Account;
 import models.User;
 import util.LinkedList;
@@ -12,6 +13,7 @@ public class BankApp {
     private User user;
     private Account account;
     private UserRepo ur = new UserDBRepo();
+    private AccountRepo ar = new AccountDBRepo();
 
     public BankApp() {
         this.loggedIn = false;
@@ -53,6 +55,7 @@ public class BankApp {
             System.out.println("Check account information - 1 \n Create new account -2 \n Exit - 3");
 
             if(option == 1) {
+                System.out.println("Here are your current accounts: ");
                 checkAccounts(user);
                 option = 0;
             }
@@ -105,12 +108,17 @@ public class BankApp {
     }
 
     public void checkAccounts(User user) {
-        //account.toString();
-
+        int id = user.getUserId();
+        LinkedList<Account> accounts = ar.getUserAccounts(id);
+        System.out.println(accounts.toString());
     }
 
-    public void makeDeposit(Account account) {
-
+    public void makeDeposit(Account account) throws NegativeException {
+        Scanner input = new Scanner(System.in);
+        System.out.println("How much would you like to deposit?");
+        double amount = input.nextDouble();
+        account.deposit(amount);
+        ar.updateAccount(account);
     }
 
     public void makeWithdrawal(Account account) {

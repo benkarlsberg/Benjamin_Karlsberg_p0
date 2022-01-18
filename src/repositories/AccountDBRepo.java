@@ -79,15 +79,16 @@ public class AccountDBRepo implements AccountRepo{
     }
 
     @Override
-    public Account updateAccountType(Account change) {
+    public Account updateAccount(Account change) {
 
-        String sql = "UPDATE accounts set account_type=? WHERE acc_id = ? RETURNING *";
+        String sql = "UPDATE accounts set account_type=?, Balance=? WHERE acc_id = ? RETURNING *";
 
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
 
             ps.setString(1, change.getAccountType());
-            ps.setInt(2, change.getUserId());
+            ps.setDouble(2, change.getBalance());
+            ps.setInt(3, change.getUserId());
 
             ResultSet rs = ps.executeQuery();
 
@@ -100,30 +101,6 @@ public class AccountDBRepo implements AccountRepo{
         }
         return null;
     }
-
-    @Override
-    public Account updateAccountBalance(Account change) {
-
-        String sql = "UPDATE accounts set Balance=? WHERE acc_id = ? RETURNING *";
-
-        try {
-            PreparedStatement ps = conn.prepareStatement(sql);
-
-            ps.setDouble(1, change.getBalance());
-            ps.setInt(2, change.getUserId());
-
-            ResultSet rs = ps.executeQuery();
-
-            if(rs.next()) {
-                return buildAccount(rs);
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
 
     @Override
     public Account deleteAccount(int id) throws ResourceNotFoundException {
