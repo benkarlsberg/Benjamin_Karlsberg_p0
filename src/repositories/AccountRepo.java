@@ -10,7 +10,9 @@ public interface AccountRepo {
     public Account addAccount(Account a);
     public Account getAccount(int id);
     public LinkedList<Account> getAllAccounts();
-    public Account updateAccount(Account change);
+    public Account updateAccountType(Account change);
+    public Account updateAccountBalance(Account change);
     public Account deleteAccount(int id) throws ResourceNotFoundException;
+    public LinkedList<Account> getUserAccounts(int id);
 
 }

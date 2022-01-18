@@ -68,7 +68,7 @@ public class UserDBRepo implements UserRepo {
 
             ResultSet rs = ps.executeQuery();
 
-            LinkedList<User> users = new LinkedList<User>();
+            LinkedList<User> users = new LinkedList<>();
             while(rs.next()) {
                 users.insert(buildUser(rs));
             }

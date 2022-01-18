@@ -1,6 +1,7 @@
 package repositories;
 
 import exceptions.ResourceNotFoundException;
+import models.Account;
 import models.User;
 import util.LinkedList;
 

@@ -66,7 +66,7 @@ public class AccountDBRepo implements AccountRepo{
 
             ResultSet rs = ps.executeQuery();
 
-            LinkedList<Account> accounts = new LinkedList<Account>();
+            LinkedList<Account> accounts = new LinkedList<>();
             while(rs.next()) {
                 accounts.insert(buildAccount(rs));
             }
@@ -79,16 +79,15 @@ public class AccountDBRepo implements AccountRepo{
     }
 
     @Override
-    public Account updateAccount(Account change) {
+    public Account updateAccountType(Account change) {
 
-        String sql = "UPDATE accounts set account_type=?, balance=? WHERE acc_id = ? RETURNING *";
+        String sql = "UPDATE accounts set account_type=? WHERE acc_id = ? RETURNING *";
 
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
 
             ps.setString(1, change.getAccountType());
-            ps.setDouble(2, change.getBalance());
-            ps.setInt(3, change.getUserId());
+            ps.setInt(2, change.getUserId());
 
             ResultSet rs = ps.executeQuery();
 
@@ -101,6 +100,30 @@ public class AccountDBRepo implements AccountRepo{
         }
         return null;
     }
+
+    @Override
+    public Account updateAccountBalance(Account change) {
+
+        String sql = "UPDATE accounts set Balance=? WHERE acc_id = ? RETURNING *";
+
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+
+            ps.setDouble(1, change.getBalance());
+            ps.setInt(2, change.getUserId());
+
+            ResultSet rs = ps.executeQuery();
+
+            if(rs.next()) {
+                return buildAccount(rs);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
     @Override
     public Account deleteAccount(int id) throws ResourceNotFoundException {
@@ -118,6 +141,29 @@ public class AccountDBRepo implements AccountRepo{
             } else {
                 throw new ResourceNotFoundException("Resource with id: " + id + " was not found in database.");
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public LinkedList<Account> getUserAccounts(int id) {
+
+        String sql = "SELECT * FROM accounts WHERE u_id = ?";
+
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, id);
+
+            ResultSet rs = ps.executeQuery();
+
+            LinkedList<Account> accounts = new LinkedList<>();
+            while(rs.next()) {
+                accounts.insert(buildAccount(rs));
+            }
+            return accounts;
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
