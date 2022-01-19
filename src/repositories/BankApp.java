@@ -56,7 +56,7 @@ public class BankApp {
             }
         }
 
-        System.out.println("");
+        System.out.println();
         System.out.println("Welcome " + user.getFirstName() + "!");
 
         option = 10;
@@ -73,7 +73,7 @@ public class BankApp {
                 LinkedList<Account> accounts = getAccounts(user);
                 if (!accounts.isEmpty()) {
                     System.out.println("Here are your current accounts: ");
-                    System.out.println(accounts.toString());
+                    System.out.println(accounts);
                 } else {
                     System.out.println("You do not have any accounts.");
                 }

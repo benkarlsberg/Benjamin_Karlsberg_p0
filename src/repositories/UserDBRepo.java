@@ -4,9 +4,7 @@ import exceptions.ResourceNotFoundException;
 import models.User;
 import util.JDBCConnection;
 import util.LinkedList;
-import util.Node;
 
-import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

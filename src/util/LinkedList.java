@@ -1,7 +1,5 @@
 package util;
 
-import util.Node;
-
 import java.lang.reflect.InvocationTargetException;
 
 public class LinkedList<T> {
