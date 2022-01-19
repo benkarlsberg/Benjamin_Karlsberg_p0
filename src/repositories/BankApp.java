@@ -1,6 +1,8 @@
 package repositories;
 
 import exceptions.NegativeException;
+import exceptions.ResourceNotFoundException;
+import exceptions.WithdrawException;
 import models.Account;
 import models.User;
 import util.LinkedList;
@@ -27,7 +29,7 @@ public class BankApp {
         this.loggedIn = loggedIn;
     }
 
-    public void run() {
+    public void run() throws NegativeException, WithdrawException, ResourceNotFoundException {
 
         System.out.println("Welcome to the banking app.");
         System.out.println("Please select an option: ");
@@ -50,35 +52,71 @@ public class BankApp {
             } else {
                 System.out.println("Please enter a valid option.");
                 System.out.println("Login - 1\nRegister new user - 2\nExit - 3\n");
-
+                option = input.nextInt();
             }
         }
 
         System.out.println("");
-        System.out.println("You are now logged in as " + user.getUserName() + "\n");
-        System.out.println("Please select an option: ");
-        System.out.println("Check account information - 1\nOpen an account - 2\nExit - 3\n");
+        System.out.println("Welcome " + user.getFirstName() + "!");
 
-        option = input.nextInt();
+        option = 10;
 
         while(option != 0) {
 
+            System.out.println("Please select an option:\n");
+            System.out.println("Check account information - 1\nMake a withdrawal - 2" +
+                    "\nMake a deposit - 3\nOpen an account - 4\nClose an account - 5\nExit - 6\n");
+            option = input.nextInt();
+
             if(option == 1) {
-                System.out.println("Here are your current accounts: ");
-                checkAccounts(user);
-                option = 0;
+
+                LinkedList<Account> accounts = getAccounts(user);
+                if (!accounts.isEmpty()) {
+                    System.out.println("Here are your current accounts: ");
+                    System.out.println(accounts.toString());
+                } else {
+                    System.out.println("You do not have any accounts.");
+                }
             }
             else if(option == 2) {
-               account = createAccount();
-               option = 0;
+                LinkedList<Account> accounts = getAccounts(user);
+                if (!accounts.isEmpty())
+                    makeWithdrawal(accounts);
+                else {
+                    System.out.println("You do not have any accounts.");
+                }
+
             }
-            else if(option ==3) {
+            else if (option == 3) {
+                LinkedList<Account> accounts = getAccounts(user);
+                if (!accounts.isEmpty())
+                    makeDeposit(accounts);
+                else {
+                    System.out.println("You do not have any accounts.");
+                }
+
+            }
+            else if (option == 4) {
+                account = createAccount(user);
+            }
+            else if (option == 5) {
+                LinkedList<Account> accounts = getAccounts(user);
+                if (!accounts.isEmpty())
+                    closeAccount(accounts);
+                else {
+                    System.out.println("You do not have any accounts.");
+                }
+            }
+            else if(option == 6) {
+                System.out.println("Thank you for using the banking app. Goodbye!");
                 return;
             }
             else {
                 System.out.println("Please enter a valid option.");
+                System.out.println("Check account information - 1\nMake a withdrawal - 2" +
+                        "\nMake a deposit - 3\nOpen an account - 4\nExit - 5\n");
+                option = input.nextInt();
             }
-
         }
 
     }
@@ -122,27 +160,120 @@ public class BankApp {
         return user;
     }
 
-    public void checkAccounts(User user) {
+    public LinkedList<Account> getAccounts(User user) {
         int id = user.getUserId();
         LinkedList<Account> accounts = ar.getUserAccounts(id);
-        System.out.println(accounts.toString());
+        return accounts;
     }
 
-    public void makeDeposit(Account account) throws NegativeException {
+    public void makeDeposit(LinkedList<Account> accounts) throws NegativeException {
         Scanner input = new Scanner(System.in);
+        System.out.println("Which account would you like to deposit into? (Enter account ID)\n");
+        System.out.println(accounts.toString() + "\n");
+
+        int id = input.nextInt();
+        if (idFound(accounts, id)) {
+            account = ar.getAccount(id);
+        } else {
+            System.out.println("You did not enter a valid account ID. Please try again.");
+            return;
+        }
+
+        System.out.println("Your balance is currently: $" + account.getBalance());
         System.out.println("How much would you like to deposit?");
         double amount = input.nextDouble();
-        account.deposit(amount);
-        ar.updateAccount(account);
+        if(amount < 0) {
+            System.out.println("You cannot make a negative deposit.");
+        } else {
+            account.deposit(amount);
+            ar.updateAccount(account);
+            System.out.println("You have successfully deposited $" + amount +
+                    ". Your account balance is now: $" + account.getBalance());
+        }
     }
 
-    public void makeWithdrawal(Account account) {
+    public void makeWithdrawal(LinkedList<Account> accounts) throws NegativeException, WithdrawException {
+        Scanner input = new Scanner(System.in);
+        System.out.println("Which account would you like to withdraw from? (Enter account ID)\n");
+        System.out.println(accounts.toString() + "\n");
 
+        int id = input.nextInt();
+        if (idFound(accounts, id)) {
+            account = ar.getAccount(id);
+        } else {
+            System.out.println("You did not enter a valid account ID. Please try again.");
+            return;
+        }
+
+        System.out.println("Your balance is currently: $" + account.getBalance());
+
+        if(account.getBalance() == 0) {
+            System.out.println("You do not have enough funds to make a withdrawal.");
+        } else {
+            System.out.println("How much would you like to withdraw?");
+            double amount = input.nextDouble();
+            if(amount < 0 || amount > account.getBalance()) {
+                System.out.println("You cannot withdraw that amount.");
+            } else {
+                account.withdraw(amount);
+                ar.updateAccount(account);
+                System.out.println("You have successfully withdrawn $" + amount + ". " +
+                        "Your account balance is now: $" + account.getBalance());
+            }
+        }
     }
 
-    public Account createAccount() {
+    public Account createAccount(User user) {
+        Scanner input = new Scanner(System.in);
 
-        return null;
+        String accountType = null;
+        System.out.println("Would you like to open a Checking (1) or Savings (2) account?");
+        System.out.println(user.getUserId());
+
+        int option = input.nextInt();
+        while (option != 0) {
+            if (option == 1) {
+                accountType = "checking";
+                option = 0;
+            } else if (option == 2) {
+                accountType = "savings";
+                option = 0;
+            } else {
+                System.out.println("Invalid Input");
+                option = input.nextInt();
+            }
+        }
+        Account account = new Account(user.getUserId(), accountType);
+        ar.addAccount(account);
+        System.out.println("You have successfully opened an account.");
+
+        return account;
+    }
+
+    public void closeAccount(LinkedList<Account> accounts) throws ResourceNotFoundException {
+        Scanner input = new Scanner(System.in);
+        System.out.println("Which account would you like to close? (Enter account ID)\n");
+        System.out.println(accounts.toString() + "\n");
+
+        int id = input.nextInt();
+        if (idFound(accounts, id)) {
+            account = ar.deleteAccount(id);
+            System.out.println("You have successfully closed account with ID: " + id);
+        } else {
+            System.out.println("You did not enter a valid account ID. Please try again.");
+        }
+    }
+
+    //helper function
+    public boolean idFound(LinkedList<Account> accounts, int id) {
+        boolean found = false;
+        for(int i = 0; i < accounts.getNumItems(); i++) {
+            if (id == accounts.find(i).getObject().getAccId()) {
+                found = true;
+                break;
+            }
+        }
+        return found;
     }
 
 }

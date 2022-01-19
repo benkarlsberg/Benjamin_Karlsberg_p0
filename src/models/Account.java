@@ -62,8 +62,6 @@ public class Account {
         if (this.balance > amount) {
             if (amount >= 0.0) {
                 setBalance(getBalance() - amount);
-                System.out.println("You have successfully withdrawn $" + amount + ". " +
-                        "Your account balance is now: $" + getBalance() + "");
             } else {
                 throw new NegativeException();
             }
@@ -76,8 +74,6 @@ public class Account {
     public void deposit(double amount) throws NegativeException {
         if (amount >= 0.0) {
             setBalance(getBalance() + amount);
-            System.out.println("You have made a successful deposit of $" + amount + ". " +
-                    "Your account balance is now: $" + getBalance() + "");
         }
         else {
             throw new NegativeException();
@@ -86,11 +82,9 @@ public class Account {
 
     @Override
     public String toString() {
-        return "Account{" +
-                " Account Id: " + accountId +
-                " User Id: " + userId +
+        return  " Account Id: " + accountId +
+                ", User Id: " + userId +
                 ", Account Type: '" + accountType + '\'' +
-                " Balance: " + balance + '\'' +
-                '}';
+                ", Balance: " + balance + "\n";
     }
 }
