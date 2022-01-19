@@ -37,15 +37,18 @@ public class BankApp {
 
         int option = input.nextInt();
 
-        while(option != 0) {
+        while(!isLoggedIn()) {
 
             if (option == 1) {
                 user = login();
-                option = 0;
+                if(user == null) {
+                    System.out.println("Please select an option: ");
+                    System.out.println("Login - 1\nRegister new user - 2\nExit - 3\n");
+                    option = input.nextInt();
+                }
             } else if (option == 2) {
                 user = createUserAccount();
                 setLoggedIn(true);
-                option = 0;
             } else if (option == 3) {
                 System.out.println("Thank you for using the app. Goodbye!");
                 return;
@@ -56,12 +59,11 @@ public class BankApp {
             }
         }
 
+
         System.out.println();
         System.out.println("Welcome " + user.getFirstName() + "!");
 
-        option = 10;
-
-        while(option != 0) {
+        while(isLoggedIn()) {
 
             System.out.println("Please select an option:\n");
             System.out.println("Check account information - 1\nMake a withdrawal - 2" +
@@ -125,11 +127,15 @@ public class BankApp {
         Scanner input = new Scanner(System.in);
         System.out.println("Enter your Username: ");
         String username = input.nextLine();
+        User user = ur.getUser(username);
+
+        if (ur.getUser(username) == null) {
+            System.out.println("Username not found");
+            return null;
+        }
+
         System.out.println("Enter your password: ");
         String password = input.nextLine();
-
-        // login logic
-        User user = ur.getUser(username);
 
         while (!isLoggedIn()) {
             if (password.equals(user.getPassword()))
@@ -230,14 +236,15 @@ public class BankApp {
         System.out.println("Would you like to open a Checking (1) or Savings (2) account?");
         System.out.println(user.getUserId());
 
+        boolean accountCreated = false;
         int option = input.nextInt();
-        while (option != 0) {
+        while (!accountCreated) {
             if (option == 1) {
                 accountType = "checking";
-                option = 0;
+                accountCreated = true;
             } else if (option == 2) {
                 accountType = "savings";
-                option = 0;
+                accountCreated = true;
             } else {
                 System.out.println("Invalid Input");
                 option = input.nextInt();
