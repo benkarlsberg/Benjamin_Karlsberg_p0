@@ -14,6 +14,11 @@ public class UserDBRepo implements UserRepo {
 
     Connection conn = JDBCConnection.getConnection();
 
+    /**
+     * Adds user to SQL database
+     * @param u User to be added to SQL database
+     * @return User added
+     */
     @Override
     public User addUser(User u) {
 
@@ -38,6 +43,11 @@ public class UserDBRepo implements UserRepo {
         return null;
     }
 
+    /**
+     * Retrieves user from SQL Database
+     * @param id u_id
+     * @return User from users table
+     */
     @Override
     public User getUser(int id) {
 
@@ -58,6 +68,11 @@ public class UserDBRepo implements UserRepo {
         return null;
     }
 
+    /**
+     * Returns user from SQL database by username
+     * @param username username of user
+     * @return user
+     */
     @Override
     public User getUser(String username) {
         String sql = "SELECT * FROM users WHERE username = ?";
@@ -77,6 +92,10 @@ public class UserDBRepo implements UserRepo {
         return null;
     }
 
+    /**
+     * Returns all users in users table
+     * @return LinkedList of users
+     */
     @Override
     public LinkedList<User> getAllUsers() {
 
@@ -99,6 +118,11 @@ public class UserDBRepo implements UserRepo {
         return null;
     }
 
+    /**
+     * updates user with new user info
+     * @param change User with changes and same u_id
+     * @return updated user
+     */
     @Override
     public User updateUser(User change) {
 
@@ -125,6 +149,12 @@ public class UserDBRepo implements UserRepo {
         return null;
     }
 
+    /**
+     * Removes user from users table
+     * @param id u_id
+     * @return user deleted
+     * @throws ResourceNotFoundException if user not in table
+     */
     @Override
     public User deleteUser(int id) throws ResourceNotFoundException {
 

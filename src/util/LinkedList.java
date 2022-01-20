@@ -77,6 +77,7 @@ public class LinkedList<T> {
         }
     }
 
+    //removes node at given index
     public void delete(int index) {
         if (index >= 0 && index < numItems) {
             if (index == 0) {

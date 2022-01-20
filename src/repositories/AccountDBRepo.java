@@ -14,6 +14,11 @@ public class AccountDBRepo implements AccountRepo{
 
     Connection conn = JDBCConnection.getConnection();
 
+    /**
+     * Adds account into SQL database
+     * @param a account to be added
+     * @return Account added
+     */
     @Override
     public Account addAccount(Account a) {
         String sql = "INSERT INTO accounts VALUES (default, ?, ?, ?) RETURNING *";
@@ -36,6 +41,11 @@ public class AccountDBRepo implements AccountRepo{
         return null;
     }
 
+    /**
+     * Returns account from SQL database based on acc_id
+     * @param id acc_id
+     * @return Account with acc_id given
+     */
     @Override
     public Account getAccount(int id) {
 
@@ -56,6 +66,10 @@ public class AccountDBRepo implements AccountRepo{
         return null;
     }
 
+    /**
+     * Retrieves all accounts
+     * @return LinkedList<Account> of accounts
+     */
     @Override
     public LinkedList<Account> getAllAccounts() {
 
@@ -78,6 +92,11 @@ public class AccountDBRepo implements AccountRepo{
         return null;
     }
 
+    /**
+     * Updates SQL database with account balance change
+     * @param change account with changes
+     * @return account with changes
+     */
     @Override
     public Account updateAccount(Account change) {
 
@@ -101,6 +120,12 @@ public class AccountDBRepo implements AccountRepo{
         return null;
     }
 
+    /**
+     * Deletes account with given acc_id
+     * @param id acc_id
+     * @return account deleted
+     * @throws ResourceNotFoundException if not found in SQL database
+     */
     @Override
     public Account deleteAccount(int id) throws ResourceNotFoundException {
 
@@ -123,6 +148,11 @@ public class AccountDBRepo implements AccountRepo{
         return null;
     }
 
+    /**
+     * Gets all accounts of a user
+     * @param id u_id
+     * @return LinkedList<Account> of all accounts
+     */
     @Override
     public LinkedList<Account> getUserAccounts(int id) {
 

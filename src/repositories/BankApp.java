@@ -29,6 +29,12 @@ public class BankApp {
         this.loggedIn = loggedIn;
     }
 
+    /**
+     * Runs the user input interface on the console
+     * @throws NegativeException if withdraw or deposit is negative input
+     * @throws WithdrawException if withdraw is greater than account balance
+     * @throws ResourceNotFoundException if user or account is not found in sql database
+     */
     public void run() throws NegativeException, WithdrawException, ResourceNotFoundException {
 
         System.out.println("Welcome to the banking app.");
@@ -122,6 +128,10 @@ public class BankApp {
 
     }
 
+    /**
+     * logs user in
+     * @return user that is logged in
+     */
     public User login() {
         Scanner input = new Scanner(System.in);
         System.out.println("Enter your Username: ");
@@ -147,6 +157,10 @@ public class BankApp {
         return user;
     }
 
+    /**
+     * adds a user account to users table
+     * @return user added
+     */
     public User createUserAccount() {
         Scanner input = new Scanner(System.in);
         System.out.println("Enter your first name: ");
@@ -165,6 +179,11 @@ public class BankApp {
         return ur.getUser(username);
     }
 
+    /**
+     * returns accounts of the user in a LinkedList
+     * @param user user
+     * @return LinkedList of accounts
+     */
     public LinkedList<Account> getAccounts(User user) {
         int id = user.getUserId();
         return ar.getUserAccounts(id);
@@ -196,6 +215,12 @@ public class BankApp {
         }
     }
 
+    /**
+     * lowers balance in account
+     * @param accounts list of user's accounts
+     * @throws NegativeException if negative input
+     * @throws WithdrawException if input greater than balance
+     */
     public void makeWithdrawal(LinkedList<Account> accounts) throws NegativeException, WithdrawException {
         Scanner input = new Scanner(System.in);
         System.out.println("Which account would you like to withdraw from? (Enter account ID)\n");
@@ -227,6 +252,11 @@ public class BankApp {
         }
     }
 
+    /**
+     * adds new account to accounts table
+     * @param user user linked to account
+     * @return account created
+     */
     public Account createAccount(User user) {
         Scanner input = new Scanner(System.in);
 
@@ -255,6 +285,11 @@ public class BankApp {
         return account;
     }
 
+    /**
+     * removes account from accounts table
+     * @param accounts accounts
+     * @throws ResourceNotFoundException if account is not found in accounts table
+     */
     public void closeAccount(LinkedList<Account> accounts) throws ResourceNotFoundException {
         Scanner input = new Scanner(System.in);
         System.out.println("Which account would you like to close? (Enter account ID)\n");

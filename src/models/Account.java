@@ -58,6 +58,12 @@ public class Account {
         this.accountType = accountType;
     }
 
+    /**
+     * lowers account balance
+     * @param amount amount to withdraw
+     * @throws WithdrawException if amount is greater than balance
+     * @throws NegativeException if amount is negative
+     */
     public void withdraw(double amount) throws WithdrawException, NegativeException {
         if (this.balance > amount) {
             if (amount >= 0.0) {
@@ -71,6 +77,11 @@ public class Account {
         }
     }
 
+    /**
+     * increases account balance
+     * @param amount amount to deposit
+     * @throws NegativeException if amount is negative
+     */
     public void deposit(double amount) throws NegativeException {
         if (amount >= 0.0) {
             setBalance(getBalance() + amount);
