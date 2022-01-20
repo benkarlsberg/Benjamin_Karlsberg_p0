@@ -8,10 +8,9 @@ import repositories.AccountRepo;
 import repositories.UserDBRepo;
 import repositories.UserRepo;
 
-import java.io.IOException;
 
 public class AccountRepoTest {
-    public static void main(String[] args) throws IOException, ResourceNotFoundException {
+    public static void main(String[] args){
 
         UserRepo ur = new UserDBRepo();
         AccountRepo ar = new AccountDBRepo();

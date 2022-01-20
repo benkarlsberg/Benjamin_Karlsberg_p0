@@ -14,8 +14,8 @@ public class BankApp {
     Scanner input = new Scanner(System.in);
     private User user;
     private Account account;
-    private UserRepo ur = new UserDBRepo();
-    private AccountRepo ar = new AccountDBRepo();
+    private final UserRepo ur = new UserDBRepo();
+    private final AccountRepo ar = new AccountDBRepo();
 
     public BankApp() {
         this.loggedIn = false;
@@ -117,7 +117,6 @@ public class BankApp {
                 System.out.println("Please enter a valid option.");
                 System.out.println("Check account information - 1\nMake a withdrawal - 2" +
                         "\nMake a deposit - 3\nOpen an account - 4\nExit - 5\n");
-                option = input.nextInt();
             }
         }
 
@@ -163,13 +162,12 @@ public class BankApp {
 
         ur.addUser(user);
 
-        return user;
+        return ur.getUser(username);
     }
 
     public LinkedList<Account> getAccounts(User user) {
         int id = user.getUserId();
-        LinkedList<Account> accounts = ar.getUserAccounts(id);
-        return accounts;
+        return ar.getUserAccounts(id);
     }
 
     public void makeDeposit(LinkedList<Account> accounts) throws NegativeException {
